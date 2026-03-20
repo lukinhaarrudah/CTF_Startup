@@ -1,0 +1,3 @@
+theme: jekyll-theme-cayman
+title: CTF Write-up | Startup
+description: Exploração de FTP anônimo e Escalation via CVE-2021-4034 (PwnKit)
