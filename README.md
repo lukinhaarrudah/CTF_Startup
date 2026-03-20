@@ -35,7 +35,7 @@ No servidor Web, utilizei o Gobuster para realizar um brute-force de diretórios
 ## 2. Acesso Inicial e Exploração
 
 ### Vetor de Ataque: Upload Bypass
-Aproveitando a permissão de escrita no diretório `/ftp`, realizei o upload de uma **reverse shell em PHP**. Em seguida, iniciei o Netcat no meu terminal para aguardar a conexão reversa.
+Aproveitando a permissão de escrita no diretório `/ftp`,acessei o FTP com usuario anonymous e realizei o upload de uma **reverse shell em PHP**. Em seguida, iniciei o Netcat no meu terminal para aguardar a conexão reversa.
 
 ![FTP Upload](img/subindo_reverse_shell_pelo_ftp.png)
 ![Web Trigger](img/imagem_reverseshell_no_servidor.png)
