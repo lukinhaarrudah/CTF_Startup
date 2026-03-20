@@ -27,6 +27,15 @@ Comecei uma varredura com Nmap, que revelou 3 portas abertas rodando os serviço
 
 <br>
 
+### Exploração Inicial de FTP (Anonymous Login)
+Ao identificar que o serviço FTP permitia login anônimo, acessei o servidor para verificar os arquivos disponíveis e testar as permissões de download.
+
+| | |
+|:---:|:---:|
+| **Login Anonymous** <br> ![FTP Login](img/consegui_logar_ftp_com_anonymous.png) | **Download de Arquivos** <br> ![FTP Download](img/conseugi_logar_com_ftp_e_baixar_arquivos.png) |
+
+<br>
+
 ### Enumeração Web (Gobuster)
 No servidor Web, utilizei o Gobuster para realizar um brute-force de diretórios e localizei o diretório `/files`, que dava acesso direto aos arquivos enviados via FTP.
 
@@ -41,7 +50,7 @@ No servidor Web, utilizei o Gobuster para realizar um brute-force de diretórios
 ## 2. Acesso Inicial e Exploração
 
 ### Vetor de Ataque: Upload Bypass
-Aproveitando a permissão de escrita no diretório `/ftp`, acessei o FTP com usuário anonymous e realizei o upload de uma **reverse shell em PHP**. Em seguida, iniciei o Netcat no meu terminal para aguardar a conexão reversa.
+Aproveitando a permissão de escrita no diretório `/ftp`,acessei o FTP com usuario anonymous e realizei o upload de uma **reverse shell em PHP**. Em seguida, iniciei o Netcat no meu terminal para aguardar a conexão reversa.
 
 | | |
 |:---:|:---:|
@@ -52,7 +61,9 @@ Aproveitando a permissão de escrita no diretório `/ftp`, acessei o FTP com usu
 ### Ganho de Shell
 Acessei o arquivo enviado pelo navegador para executar o payload. Consegui estabelecer a conexão com sucesso e, logo após isso, estabilizei a shell utilizando comandos de Python para obter um terminal interativo.
 
-![Python Upgrade](img/shell_funcionou_e_melhorando_shell_com_python.png)
+| | |
+|:---:|:---:|
+| **Iniciando Handler** <br> ![MSF Handler](img/iniciando_multi_handler.png) | **Shell Python** <br> ![Python Upgrade](img/shell_funcionou_e_melhorando_shell_com_python.png) |
 
 <br>
 
@@ -60,7 +71,7 @@ Acessei o arquivo enviado pelo navegador para executar o payload. Consegui estab
 
 ## 3. Pós-Exploração e Movimentação
 
-Investigando o sistema de arquivos, localizei a primeira flag (`recipe.txt`). Comecei a procura por binários com permissão **SUID** para encontrar um vetor de escalação de privilégios (*Privilege Escalation*). Através de pesquisas, identifiquei que o binário `pkexec` era vulnerável à **CVE-2021-4034**, também conhecida como **"PwnKit"**. 
+Investigando o sistema de arquivos, localizei a primeira flag (`recipe.txt`).Comecei a procura por binários com permissão **SUID** para encontrar um vetor de escalação de privilégios (*Privilege Escalation*). Através de pesquisas, identifiquei que o binário `pkexec` era vulnerável à **CVE-2021-4034**, também conhecida como **"PwnKit"**. 
 
 Essa falha ocorre porque o `pkexec` não processa corretamente a contagem de argumentos, permitindo que um invasor injete variáveis de ambiente perigosas para executar código como root. de forma mais explicativa simples:
 É um erro de contagem que permite a um usuário comum, que não tem permissões de admin, enganar o sistema e virar administrador instantaneamente. Ele pode após isso, ler qualquer arquivo do sistema, podendo roubar senhas, logins e dados confidenciais; espionar tudo o que a vítima digita e acessa, e até realizar um sequestro de dados (Ransomware), nesse cenário, o criminoso bloqueia o acesso ao sistema e exige resgates altíssimos em criptomoedas, causando prejuízos financeiros e operacionais imensos para qualquer empresa.
